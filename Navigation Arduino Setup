@@ -1,0 +1,51 @@
+
+//wheels
+int LeftWheel_In3 = 2;
+int LeftWheel_In4 = 4;
+int LeftEnable = 6;
+int RightWheel_In2 = 8;
+int RightWheel_In1 = 7;
+int RightEnable = 5;
+
+//US Sensor
+int NavTrigger = 10;
+int NavEcho = 9;
+
+//WIFI
+int CameraRX = 3;
+int CameraTX = 12;
+
+  
+void setup()
+{
+  pinMode(LeftWheel_In3, OUTPUT);
+  pinMode(LeftWheel_In4, OUTPUT);
+  pinMode(RightWheel_In2, OUTPUT);
+  pinMode(RightWheel_In1, OUTPUT);
+  
+  pinMode(LeftEnable, OUTPUT);
+  pinMode(RightEnable, OUTPUT);
+
+  pinMode(NavTrigger, OUTPUT);
+  pinMode(NavEcho, INPUT);
+  
+  pinMode(CameraRX, INPUT);
+  pinMode(CameraTX, OUTPUT);
+  
+
+}
+
+void loop()
+{
+}
+
+
+
+
+
+
+
+
+
+
+
