@@ -1,0 +1,31 @@
+//Linear Actuator
+int LinAc_In4 = 2;
+int LinAc_In3 = 4;
+int LinAcEnable = 5;
+
+//Water Pump
+int PumpIn1 = 13;
+int PumpIn2 = 1;
+  //enable 1 & 2 not needed, I think
+  
+//Ultrasonic Sensor
+int MissionTrigger = 10;
+int MissionEcho = 11;
+
+void setup()
+{
+  pinMode(LinAc_In4, OUTPUT);
+  pinMode(LinAc_In3, OUTPUT);
+  pinMode(LinAcEnable, OUTPUT);
+ 
+  pinMode(MissionTrigger, OUTPUT);
+  pinMode(MissionEcho, INPUT);
+  
+  pinMode(PumpIn1, OUTPUT);
+  pinMode(PumpIn2, OUTPUT);
+}
+
+void loop()
+{
+  
+}
