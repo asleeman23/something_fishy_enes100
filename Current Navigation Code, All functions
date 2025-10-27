@@ -1,0 +1,121 @@
+
+//wheels
+int LeftWheel_In3 = 2;
+int LeftWheel_In4 = 4;
+int LeftEnable = 6;
+int RightWheel_In2 = 8;
+int RightWheel_In1 = 7;
+int RightEnable = 5;
+
+//US Sensor
+int NavTrigger = 10;
+int NavEcho = 9;
+
+//WIFI
+int CameraRX = 3;
+int CameraTX = 12;
+
+int DriveSpeed = 0; 
+
+void setup()
+{
+  pinMode(LeftWheel_In3, OUTPUT);
+  pinMode(LeftWheel_In4, OUTPUT);
+  pinMode(RightWheel_In2, OUTPUT);
+  pinMode(RightWheel_In1, OUTPUT);
+  
+  pinMode(LeftEnable, OUTPUT);
+  pinMode(RightEnable, OUTPUT);
+
+  pinMode(NavTrigger, OUTPUT);
+  pinMode(NavEcho, INPUT);
+  
+  pinMode(CameraRX, INPUT);
+  pinMode(CameraTX, OUTPUT);
+  
+
+}
+
+void loop()
+{
+ ForwardDrive(100); 
+  delay(1000);
+ StopDrive();
+  delay(1000);
+ ReverseDrive(100);
+  delay(1000);
+  
+}
+
+void ForwardDrive (int speed) //drives forward, set a speed 0 to 255
+{
+  if (speed < 0) speed = 0;
+  if (speed > 225) speed = 225; //speed cant go above 225 or below 0
+  
+  analogWrite(LeftEnable, speed);
+  analogWrite(RightEnable, speed);
+  
+  digitalWrite(LeftWheel_In3, HIGH);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, HIGH);
+  digitalWrite(RightWheel_In2, LOW);  
+}
+
+
+void ReverseDrive (int speed) //drives backward, set a speed 0 to 255
+{
+  if (speed < 0) speed = 0;
+  if (speed > 225) speed = 225; //speed cant go above 225 or below 0
+  
+  DriveSpeed = speed;
+  
+  analogWrite(LeftEnable, speed);
+  analogWrite(RightEnable, speed);
+  
+  digitalWrite(LeftWheel_In3, LOW);
+  digitalWrite(LeftWheel_In4, HIGH);
+  
+  digitalWrite(RightWheel_In1, LOW);
+  digitalWrite(RightWheel_In2, HIGH);
+}
+
+void StopDrive ()  //determine later if decceleration is needed
+{
+  digitalWrite(LeftWheel_In3, LOW);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, LOW);
+  digitalWrite(RightWheel_In2, LOW);
+}
+
+void LeftTurn_Inplace ()
+{
+  analogWrite(LeftEnable, 100); //speed subject to change
+  analogWrite(RightEnable, 100);
+  
+  digitalWrite(LeftWheel_In3, LOW);
+  digitalWrite(LeftWheel_In4, HIGH);
+  
+  digitalWrite(RightWheel_In1, HIGH);
+  digitalWrite(RightWheel_In2, LOW);
+}
+
+void RightTurn_Inplace () 
+{
+  analogWrite(LeftEnable, 100); //speed subject to change
+  analogWrite(RightEnable, 100);
+  
+  digitalWrite(LeftWheel_In3, HIGH);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, LOW);
+  digitalWrite(RightWheel_In2, HIGH);
+}
+
+//turning while moving can be added later if needed
+
+
+
+
+
