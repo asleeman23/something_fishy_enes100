@@ -1,3 +1,4 @@
+#include "Enes100.h" 
 
 //wheels
 int LeftWheel_In3 = 2;
@@ -17,6 +18,10 @@ int CameraTX = 12;
 
 int DriveSpeed = 0; 
 
+float x-coord = 0;
+float y-coord = 0;
+float RotationTheta = 0;
+
 void setup()
 {
   pinMode(LeftWheel_In3, OUTPUT);
@@ -33,18 +38,37 @@ void setup()
   pinMode(CameraRX, INPUT);
   pinMode(CameraTX, OUTPUT);
   
+  Enes100.begin("Something Fishy", WATER, 679, 1120, CameraTX, CameraRX);
+  
 
 }
 
 void loop()
 {
- ForwardDrive(100); 
-  delay(1000);
- StopDrive();
-  delay(1000);
- ReverseDrive(100);
-  delay(1000);
+  Start(); //gets initial position, drives to mission site
+  Mission(); //sends signal to mission Arduino to start
+  MissionOverride(); //if mission signal not given after _ min, start nav
+  StartNavigation(); //move to xy, go through obstacle
   
+  
+  
+}
+
+
+
+
+
+
+
+
+
+void Start ();
+{
+  x-coord = Enes100.getX();
+  y-coord = Enes100.getY();
+  RotationTheta = Enes100.getTheta();
+  
+  if (
 }
 
 void ForwardDrive (int speed) //drives forward, set a speed 0 to 255
@@ -114,8 +138,3 @@ void RightTurn_Inplace ()
 }
 
 //turning while moving can be added later if needed
-
-
-
-
-
