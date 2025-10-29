@@ -43,7 +43,7 @@ void setup()
 
 }
 
-// Will loop a left turn until the robot is facing toward the end zone
+// Will loop a left turn until the OTV is facing toward the end zone
 
 void loop()
 {
