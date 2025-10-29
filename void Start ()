@@ -1,11 +1,10 @@
-#include Enes100.h
+#include <Enes100.h>
 
 //WIFI
 int CameraRX = 3;
 int CameraTX = 12;
-
-float x-coord = 0;
-float y-coord = 0;
+float x_coord = 0;
+float y_coord = 0;
 float RotationTheta = 0;
 
 void setup() {
@@ -13,10 +12,9 @@ void setup() {
 Serial.begin(9600);
 }
 
-
 void loop() {
-x-coord = Enes100.getX();
-  y-coord = Enes100.getY();
+x_coord = Enes100.getX();
+  y_coord = Enes100.getY();
   RotationTheta = Enes100.getTheta();
   Serial.print("(");
   Serial.print(x_coord);
@@ -25,4 +23,7 @@ x-coord = Enes100.getX();
   Serial.print(", ");
   Serial.print(RotationTheta);
   Serial.println(")");
+  delay(3000);
+  Enes100.println("Hello");
 }
+
