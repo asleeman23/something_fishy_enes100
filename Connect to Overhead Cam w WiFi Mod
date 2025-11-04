@@ -1,0 +1,29 @@
+#include <Enes100.h>
+
+//WIFI
+int CameraRX = 3;
+int CameraTX = 12;
+float x_coord = 0;
+float y_coord = 0;
+float RotationTheta = 0;
+
+void setup() {
+  Enes100.begin("Something Fishy", WATER, 679, 1120, CameraTX, CameraRX);
+Serial.begin(9600);
+}
+
+void loop() {
+x_coord = Enes100.getX();
+  y_coord = Enes100.getY();
+  RotationTheta = Enes100.getTheta();
+  Serial.print("(");
+  Serial.print(x_coord);
+  Serial.print(", ");
+  Serial.print(y_coord);
+  Serial.print(", ");
+  Serial.print(RotationTheta);
+  Serial.println(")");
+  delay(3000);
+  Enes100.println("Hello");
+}
+
