@@ -47,7 +47,7 @@ void setup()
 
 void loop()
 {
-  while(RotationTheta != 0) {
+  while(RotationTheta != 0) { // 0 is facing the East side of the board
 	LeftTurn_Inplace ();
 	}
   StopDrive();
@@ -57,7 +57,7 @@ void loop()
   	}
   StopDrive();
   	
-  while(RotationTheta != 1.571) {
+  while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
 	LeftTurn_Inplace ();
 	}
   StopDrive();
@@ -65,22 +65,164 @@ void loop()
   while(y_coord != b) { // Will need to find b coord
     ForwardDrive();
   	}
+} // Should be facing the first obstacle (farthest )
+
+
+
+
+// *** CLEAN UP THE FOLLOWING OBSTACLE DETECTION LOOPS!!! ***
+
+
+void loop () // Obstacle detection and movement for first set of obstacles
+{
+  while (x_coord == a) //  May need to make this a range because of the turning, the OTV's x_coord may change despite still being in the first set of obstacles
+  	while(cm >= #) { // Will need to implement Ultrasonic code
+    	ForwardDrive();
+  		}
+  	StopDrive();
+	
+  	while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
+		RightTurn_Inplace ();
+		}
+  	StopDrive();
+  
+  	while(y_coord != b) { // Will need to find b1 coord to face the second obstacle
+    	ForwardDrive();
+  		}
+  	StopDrive(); 
+  
+  	while(RotationTheta != 0) { // 0 is facing the North side of the board
+		LeftTurn_Inplace ();
+		}
+  	StopDrive();
+  
+  	while(cm >= #) { // Will need to implement Ultrasonic code
+    	ForwardDrive();
+  		}
+  	StopDrive();
+	
+  	while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
+		RightTurn_Inplace ();
+		}
+  	StopDrive();
+  
+  	while(y_coord != c) { // Will need to find c1 coord to face the second obstacle
+    	ForwardDrive();
+  		}
+  	StopDrive();
+	}
+
+// For second set of obstacles, OTV will not be in a predicted location, so to start the obstacle detection loop, we will place the OTV infront of Obstacle a2
+
+void loop () { // Obstacle detection and movement for second set of obstacles  
+  while (x_coord == b)
+    
+    while(y_coord != a) // Will need to find a coord
+    	while(RotationTheta != 0) {
+    		LeftTurn_Inplace ();
+    		}
+  		StopDrive();
+  		
+  		while(cm >= #) { // Will move toward the wall until y_coord is met
+        	ForwardDrive();
+        	}
+  		StopDrive(); 
+  
+  		while(RotationTheta != 1.571) {
+        	RightTurn_Inplace ();
+        	}
+  		StopDrive(); // Should be in front of the first obstacle of the second set
+  
+  	while(cm >= #) { // Will need to implement Ultrasonic code
+    	ForwardDrive();
+  		}
+  	StopDrive();
+	
+  	while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
+		RightTurn_Inplace ();
+		}
+  	StopDrive();
+  
+  	while(y_coord != b) { // Will need to find b2 coord to face the second obstacle
+    	ForwardDrive();
+  		}
+  	StopDrive(); 
+  
+  	while(RotationTheta != 0) { // 0 is facing the North side of the board
+		LeftTurn_Inplace ();
+		}
+  	StopDrive();
+  
+  	while(cm >= #) { // Will need to implement Ultrasonic code
+    	ForwardDrive();
+  		}
+  	StopDrive();
+	
+  	while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
+		RightTurn_Inplace ();
+		}
+  	StopDrive();
+  
+  	while(y_coord != c) { // Will need to find c2 coord to face the second obstacle
+    	ForwardDrive();
+  		}
+  	StopDrive(); 
+}
+  
+
+
+// Ultrasonic functions from Searchable Google Drive
+int trigPin = 10;    // Trigger 
+// ***pin numbers may be incorrect
+int echoPin = 11;    // Echo
+long duration, cm, inches;
+ 
+void setup() {
+  Serial.begin (9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+ 
+void loop() { // The sensor is triggered by a HIGH pulse of 10 or more microseconds 
+  // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(5);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+ 
+  // Read the signal from the sensor
+  pinMode(echoPin, INPUT);
+  duration = pulseIn(echoPin, HIGH);
+ 
+  cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
+  inches = (duration/2) / 74;   // Divide by 74 or multiply by 0.0135
+  Serial.print(inches);
+  Serial.print("in, ");
+  Serial.print(cm);
+  Serial.print("cm");
+  Serial.println();
+  delay(250);
 }
 
 
-void TurnLeftTo (float theta) {
+
+
+void TurnLeftTo (float theta) { // Turning left until RotationTheta is met
    while(RotationTheta != theta) {
 	LeftTurn_Inplace ();
 	}
   StopDrive();
 }
 
-void TurnRightTo (float theta) {
+void TurnRightTo (float theta) { // Turning right until RotationTheta is met
    while(RotationTheta != theta) {
 	RightTurn_Inplace ();
 	}
   StopDrive();
 }
+
+
 
 void ForwardDrive (int speed) //drives forward, set a speed 0 to 255
 {
