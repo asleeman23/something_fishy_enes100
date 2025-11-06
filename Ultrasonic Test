@@ -1,0 +1,29 @@
+int trigPin = 9;    // Trigger
+int echoPin = 10;   // Echo
+float duration, cm, inches;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void loop() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(5);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+
+  float cm = (duration / 2.0) / 29.1;
+  float inches = (duration / 2.0) / 74.0;
+
+  Serial.print(inches, 2); // 2 decimal places
+  Serial.print(" in, ");
+  Serial.print(cm, 2); // 2 decimal places
+  Serial.print(" cm");
+  Serial.println();
+  delay(250);
+}
