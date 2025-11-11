@@ -23,6 +23,7 @@ float x_desired = 3.35;
 float y_desired = 0;
 
 int DriveSpeed = 0;
+float cm;
   
 void setup()
 {
@@ -45,6 +46,36 @@ void setup()
 
 
 
+void loop()  //obstacles with GoTo function
+{
+  ReverseDrive(50); //move out of mission site
+  delay(500);
+  StopDrive();
+
+  GoTo(starting x, starting y); //where we start the naigation 
+  TurnLeftTo(1.571);
+  GoTo(first x, first y);
+  Obstacle();
+  if (!Obstacle) 
+  {
+    GoTo (1st x + 0.5, 1st y);
+  }
+  if (Obstacle) GoTo(2nd x, 2nd y);
+  
+  
+}
+bool Obstacle();
+float cm = distance();
+
+  if (cm <= 8.00) {
+  return true;
+  } 
+  else {
+    return false;
+  }
+}
+  
+// Position OTV in front of the first set of obstacles
 void loop()
 {
   while(RotationTheta != 0) { // 0 is facing the East side of the board
@@ -73,57 +104,67 @@ void loop()
 // *** CLEAN UP THE FOLLOWING OBSTACLE DETECTION LOOPS!!! ***
 
 
-void loop () // Obstacle detection and movement for first set of obstacles
+void loop () // Obstacle detection and movement for FIRST set of obstacles
 {
-  while (x_coord == a) //  May need to make this a range because of the turning, the OTV's x_coord may change despite still being in the first set of obstacles
-  	while(cm >= #) { // Will need to implement Ultrasonic code
-    	ForwardDrive();
-  		}
-  	StopDrive();
+  
+  while(cm >= # && x_coord != a2) { // Will need to implement Ultrasonic code and find a_coord
+    ForwardDrive();
+  	}
+  StopDrive();
 	
-  	while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
-		RightTurn_Inplace ();
-		}
-  	StopDrive();
-  
-  	while(y_coord != b) { // Will need to find b1 coord to face the second obstacle
-    	ForwardDrive();
-  		}
-  	StopDrive(); 
-  
-  	while(RotationTheta != 0) { // 0 is facing the North side of the board
-		LeftTurn_Inplace ();
-		}
-  	StopDrive();
-  
-  	while(cm >= #) { // Will need to implement Ultrasonic code
-    	ForwardDrive();
-  		}
-  	StopDrive();
-	
-  	while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
-		RightTurn_Inplace ();
-		}
-  	StopDrive();
-  
-  	while(y_coord != c) { // Will need to find c1 coord to face the second obstacle
-    	ForwardDrive();
-  		}
-  	StopDrive();
+  while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
+	LeftTurn_Inplace ();
 	}
+  StopDrive();
+  
+  while(y_coord != b) { // Will need to find b1 coord to face the second obstacle
+    ForwardDrive();
+  	}
+  StopDrive(); 
+  
+  while(RotationTheta != 0) { // 0 is facing the North side of the board
+	RightTurn_Inplace ();
+	}
+  StopDrive();
+  
+  while(cm >= # && x_coord != a2) { // Will need to implement Ultrasonic code
+    ForwardDrive();
+  	}
+  StopDrive();
+	
+  while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
+	LeftTurn_Inplace ();
+	}
+  StopDrive();
+  
+  while(y_coord != c) { // Will need to find c1 coord to face the second obstacle
+    ForwardDrive();
+  	}
+  StopDrive();
+  
+  while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
+    RightTurn_Inplace ();
+  	}
+  StopDrive();
+  
+  if (y_coord == c && cm >= #) // This will run once it has checked the first two obstacles
+    ForwardDrive ();
+}
 
-// For second set of obstacles, OTV will not be in a predicted location, so to start the obstacle detection loop, we will place the OTV infront of Obstacle a2
 
-void loop () { // Obstacle detection and movement for second set of obstacles  
+
+// OTV will not be in a predicted location, so to start the obstacle detection loop, we will place the OTV infront of Obstacle a2
+
+void loop () { // Obstacle detection and movement for SECOND set of obstacles  
   while (x_coord == b)
     
-    while(y_coord != a) // Will need to find a coord
-    	while(RotationTheta != 0) {
+    while(y_coord != a) {// Will need to find a coord
+    	while(RotationTheta != 0) { // Can use the GOTO function instead
     		LeftTurn_Inplace ();
     		}
   		StopDrive();
   		
-  		while(cm >= #) { // Will move toward the wall until y_coord is met
+  		while(cm >= a) { // Will move toward the wall until y_coord is met
         	ForwardDrive();
         	}
   		StopDrive(); 
@@ -139,7 +180,7 @@ void loop () { // Obstacle detection and movement for second set of obstacles
   	StopDrive();
 	
   	while(RotationTheta != 1.571) { // 1.571 is facing the North side of the board
-		RightTurn_Inplace ();
+		LeftTurn_Inplace ();
 		}
   	StopDrive();
   
@@ -169,40 +210,51 @@ void loop () { // Obstacle detection and movement for second set of obstacles
   	StopDrive(); 
 }
   
+void GoTo (float x, float y) {
 
+ 
+    if (y_coord < y) TurnLeftTo(1.571);
+    if (y_coord > y) TurnLeftTo(-1.571);
+
+  		while(abs(y_coord - y) > 0.1) { // Will move toward the wall until y_coord is met
+        	ForwardDrive(10);
+          y_coord = Enes100.getY();
+            delay(10);
+        	}
+  		StopDrive();
+    
+    if (x_coord < x) TurnLeftTo(0.0);
+    if (x_coord > x) TurnLeftTo(3.1416);
+    StopDrive();
+  		while(abs(x_coord - x) > 0.1) { // Will move toward the wall until y_coord is met
+        	ForwardDrive(10);
+          x_coord = Enes100.getX();
+            delay(10);
+        	}
+  		StopDrive();
+  	
+    }
+  
+      
 
 // Ultrasonic functions from Searchable Google Drive
-int trigPin = 10;    // Trigger 
-// ***pin numbers may be incorrect
-int echoPin = 11;    // Echo
-long duration, cm, inches;
+// ***pin numbers may be needed to be changed
  
-void setup() {
-  Serial.begin (9600);
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-}
- 
-void loop() { // The sensor is triggered by a HIGH pulse of 10 or more microseconds 
-  // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
-  digitalWrite(trigPin, LOW);
+float distance() { 
+  long duration;
+  digitalWrite(NavTrigger, LOW);
   delayMicroseconds(5);
-  digitalWrite(trigPin, HIGH);
+  digitalWrite(NavTrigger, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
+  digitalWrite(NavTrigger, LOW);
  
   // Read the signal from the sensor
-  pinMode(echoPin, INPUT);
-  duration = pulseIn(echoPin, HIGH);
+  pinMode(NavEcho, INPUT);
+  duration = pulseIn(NavEcho, HIGH);
  
   cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
-  inches = (duration/2) / 74;   // Divide by 74 or multiply by 0.0135
-  Serial.print(inches);
-  Serial.print("in, ");
-  Serial.print(cm);
-  Serial.print("cm");
-  Serial.println();
   delay(250);
+  return cm;
 }
 
 
@@ -228,6 +280,7 @@ void ForwardDrive (int speed) //drives forward, set a speed 0 to 255
 {
   if (speed < 0) speed = 0;
   if (speed > 225) speed = 225; //speed cant go above 225 or below 0
+  
   
   analogWrite(LeftEnable, speed);
   analogWrite(RightEnable, speed);
@@ -269,10 +322,10 @@ void StopDrive ()  //determine later if decceleration is needed
   analogWrite(RightEnable, 0);
 }
 
-void LeftTurn_Inplace ()
+void LeftTurn_Inplace (int speed)
 {
-  analogWrite(LeftEnable, 10); //speed subject to change
-  analogWrite(RightEnable, 10);
+  analogWrite(LeftEnable, speed); //speed subject to change
+  analogWrite(RightEnable, speed);
   
   digitalWrite(LeftWheel_In3, LOW);
   digitalWrite(LeftWheel_In4, HIGH);
@@ -281,10 +334,10 @@ void LeftTurn_Inplace ()
   digitalWrite(RightWheel_In2, LOW);
 }
 
-void RightTurn_Inplace () 
+void RightTurn_Inplace (int speed) 
 {
-  analogWrite(LeftEnable, 100); //speed subject to change
-  analogWrite(RightEnable, 100);
+  analogWrite(LeftEnable, speed); //speed subject to change
+  analogWrite(RightEnable, speed);
   
   digitalWrite(LeftWheel_In3, HIGH);
   digitalWrite(LeftWheel_In4, LOW);
