@@ -4,39 +4,54 @@ void loop()
 }
 
 
-void GoTo (int x, int y) {
+void GoTo (float x, float y) {
+
  
-    if (y_coord < y) TurnLeftTo(1.5708);
-    if (y_coord > y) TurnLeftTo(4.7124);
-    
+    if (y_coord < y) TurnTo(1.571);
+    if (y_coord > y) TurnTo(-1.571);
+
   		while(abs(y_coord - y) > 0.1) { // Will move toward the wall until y_coord is met
         	ForwardDrive(10);
           y_coord = Enes100.getY();
-            delay(10)
+            delay(10);
         	}
   		StopDrive();
     
-    if (x_coord < x) TurnLeftTo(0);
-    if (x_coord > x) TurnLeftTo(3.1416);
-    
+    if (x_coord < x) TurnTo(0.0);
+    if (x_coord > x) TurnTo(3.1416);
+    StopDrive();
   		while(abs(x_coord - x) > 0.1) { // Will move toward the wall until y_coord is met
         	ForwardDrive(10);
           x_coord = Enes100.getX();
-            delay(10)
+            delay(10);
         	}
   		StopDrive();
+  	
     }
+  
+void TurnTo(float theta); 
+{
+  RotationTheta = Enes100.getTheta();
+  float differenceTheta = RotationTheta - theta;
+  if (differenceTheta < 0) TurnLeftTo(theta);
+  	else if (differenceTheta > 0) TurnRightTo(theta);
+}
+
 
 void TurnLeftTo (float theta) { // Turning left until RotationTheta is met
    while(RotationTheta != theta) {
+	RotationTheta = Enes100.getTheta();
 	LeftTurn_Inplace ();
+	delay(10);
 	}
   StopDrive();
 }
 
 void TurnRightTo (float theta) { // Turning right until RotationTheta is met
    while(RotationTheta != theta) {
+	RotationTheta = Enes100.getTheta();
 	RightTurn_Inplace ();
+	delay(10);
 	}
   StopDrive();
 }
