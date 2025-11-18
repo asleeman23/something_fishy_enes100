@@ -1,6 +1,6 @@
 
 //wheels
-int LeftWheel_In3 = 2;
+int LeftWheel_In3 = 12;
 int LeftWheel_In4 = 4;
 int LeftEnable = 6;
 int RightWheel_In2 = 8;
@@ -13,7 +13,7 @@ int NavEcho = 9;
 
 //WIFI
 int CameraRX = 3;
-int CameraTX = 12;
+int CameraTX = 2;
 
   
 void setup()
