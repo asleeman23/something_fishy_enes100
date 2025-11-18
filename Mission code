@@ -1,8 +1,8 @@
 int switchPin = 7;
 
 //Linear Actuator
-int linAc_In1 = 2;
-int linAc_In2 = 4;
+int linAc_In2 = 2;
+int linAc_In1 = 4;
 int linAcEnable = 5;
 int extendTime = 6500; //time to fully extend/retract actuator
 
@@ -15,29 +15,25 @@ int pumpTime = 5000; //this is a guess. We will find a better value in testing
 int trigPin = 10;
 int echoPin = 11;
 float duration, distance, wLevel;
-int height = 500; //this is a guess of the height from the ground to the ultrasonic sensor
+int height = 82; //this is a guess of the height from the ground to the ultrasonic sensor in millimeters
 
 void setup()
 {
   Serial.begin (9600);
   pinMode(switchPin, INPUT_PULLUP);
-  pinMode(LinAc_In4, OUTPUT);
-  pinMode(LinAc_In3, OUTPUT);
-  pinMode(LinAcEnable, OUTPUT);
+  pinMode(linAc_In2, OUTPUT);
+  pinMode(linAc_In1, OUTPUT);
+  pinMode(linAcEnable, OUTPUT);
  
-  pinMode(MissionTrigger, OUTPUT);
-  pinMode(MissionEcho, INPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
   
-  pinMode(PumpIn1, OUTPUT);
+  pinMode(pumpPin, OUTPUT);
 
 }
 
 void loop() {
 
-  while (digitalRead (switchPin) == HIGH) { //this will stop the program from running until the switch is flipped
-    delay (10);
-  }
-  
   digitalWrite(trigPin, LOW);  //runs and gives a value of the water level using the ultrasonic sensor
   delayMicroseconds(2);  
   digitalWrite(trigPin, HIGH);  
@@ -46,7 +42,8 @@ void loop() {
   duration = pulseIn(echoPin, HIGH); 
   distance = duration * 0.1715;
   wLevel = height - 13 - distance;
-  Serial.print ("The Water Level is: ", wLevel);
+  Serial.print (wLevel);
+
 
   digitalWrite(linAcEnable, HIGH); //sets the speed for linear actuator
   digitalWrite (linAc_In1, HIGH); //extends linear actuator
@@ -65,4 +62,3 @@ void loop() {
 
   exit (0); //stops the program
 }
-
