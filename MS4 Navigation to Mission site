@@ -53,28 +53,6 @@ else if( y_coord < 1) GoTo(x of mission site 2, y of mission site 2); //add in c
 delay(1000000); //here just turn off the robot manually
 
 }
-bool Obstacle();
-float cm = distance();
-
-  if (cm <= 8.00) {
-  return true;
-  } 
-  else {
-    return false;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void GoTo (float x, float y) {
