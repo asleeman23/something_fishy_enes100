@@ -1,0 +1,231 @@
+
+//wheels
+int LeftWheel_In3 = 2;
+int LeftWheel_In4 = 4;
+int LeftEnable = 6;
+int RightWheel_In2 = 8;
+int RightWheel_In1 = 7;
+int RightEnable = 5;
+
+//US Sensor
+int NavTrigger = 10;
+int NavEcho = 9;
+
+//WIFI
+int CameraRX = 3;
+int CameraTX = 12;
+
+float x_coord = 0;
+float y_coord = 0;
+float RotationTheta = 0;
+
+float x_desired = 3.35;
+float y_desired = 0;
+
+int DriveSpeed = 0;
+  
+void setup()
+{
+  pinMode(LeftWheel_In3, OUTPUT);
+  pinMode(LeftWheel_In4, OUTPUT);
+  pinMode(RightWheel_In2, OUTPUT);
+  pinMode(RightWheel_In1, OUTPUT);
+  
+  pinMode(LeftEnable, OUTPUT);
+  pinMode(RightEnable, OUTPUT);
+
+  pinMode(NavTrigger, OUTPUT);
+  pinMode(NavEcho, INPUT);
+  
+  pinMode(CameraRX, INPUT);
+  pinMode(CameraTX, OUTPUT);
+  
+
+}
+
+
+
+void loop()  //obstacles with GoTo function
+{
+GoTo(x, y); //add in coords!!!!!
+delay(1000000); //here just turn off the robot manually
+
+}
+
+
+void GoTo (float x, float y) {
+
+ 
+    if (y_coord < y) TurnTo(1.571);
+    if (y_coord > y) TurnTo(-1.571);
+
+  		while(abs(y_coord - y) > 0.1) { // Will move toward the wall until y_coord is met
+        	ForwardDrive(10);
+          y_coord = Enes100.getY();
+            delay(10);
+        	}
+  		StopDrive();
+    
+    if (x_coord < x) TurnTo(0.0);
+    if (x_coord > x) TurnTo(3.1416);
+    StopDrive();
+  		while(abs(x_coord - x) > 0.1) { // Will move toward the wall until y_coord is met
+        	ForwardDrive(10);
+          x_coord = Enes100.getX();
+            delay(10);
+        	}
+  		StopDrive();
+  	
+    }
+
+void GoToYOnly(float y)
+{
+  if (y_coord < y) TurnTo(1.571);
+    if (y_coord > y) TurnTo(-1.571);
+
+  		while(abs(y_coord - y) > 0.1) { // Will move toward the wall until y_coord is met
+        	ForwardDrive(10);
+          y_coord = Enes100.getY();
+            delay(10);
+        	}
+  		StopDrive();
+    }
+void GoToXOnly(float x)
+{ 
+  if (x_coord < x) TurnTo(0.0);
+    if (x_coord > x) TurnTo(3.1416);
+    StopDrive();
+  		while(abs(x_coord - x) > 0.1) { // Will move toward the wall until y_coord is met
+        	ForwardDrive(10);
+          x_coord = Enes100.getX();
+            delay(10);
+        	}
+  		StopDrive();
+}
+  
+
+/*void DiagonalDriveTo(float x, float y) //incomplete
+{
+  TurnTo();
+} */
+  
+void TurnTo(float theta); 
+{
+  RotationTheta = Enes100.getTheta();
+  float differenceTheta = RotationTheta - theta;
+  if (differenceTheta < 0) TurnLeftTo(theta);
+  	else if (differenceTheta > 0) TurnRightTo(theta);
+}
+
+
+// Ultrasonic functions from Searchable Google Drive
+// ***pin numbers may be needed to be changed
+ 
+float distance() { 
+  float cm;
+  long duration;
+  digitalWrite(NavTrigger, LOW);
+  delayMicroseconds(5);
+  digitalWrite(NavTrigger, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(NavTrigger, LOW);
+ 
+  // Read the signal from the sensor
+  pinMode(NavEcho, INPUT);
+  duration = pulseIn(NavEcho, HIGH);
+ 
+  cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
+  delay(250);
+  return cm;
+}
+
+
+
+
+void TurnLeftTo (float theta) { // Turning left until RotationTheta is met
+   while(RotationTheta != theta) {
+	RotationTheta = Enes100.getTheta();
+     LeftTurn_Inplace ();
+	}
+  StopDrive();
+}
+
+void TurnRightTo (float theta) { // Turning right until RotationTheta is met
+   while(RotationTheta != theta) {
+    RotationTheta = Enes100.getTheta();
+	RightTurn_Inplace ();
+	}
+  StopDrive();
+}
+
+
+
+void ForwardDrive (int speed) //drives forward, set a speed 0 to 255
+{
+  if (speed < 0) speed = 0;
+  if (speed > 225) speed = 225; //speed cant go above 225 or below 0
+  
+  
+  analogWrite(LeftEnable, speed);
+  analogWrite(RightEnable, speed);
+  
+  digitalWrite(LeftWheel_In3, HIGH);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, HIGH);
+  digitalWrite(RightWheel_In2, LOW);  
+}
+
+
+void ReverseDrive (int speed) //drives backward, set a speed 0 to 255
+{
+  if (speed < 0) speed = 0;
+  if (speed > 225) speed = 225; //speed cant go above 225 or below 0
+  
+  DriveSpeed = speed;
+  
+  analogWrite(LeftEnable, speed);
+  analogWrite(RightEnable, speed);
+  
+  digitalWrite(LeftWheel_In3, LOW);
+  digitalWrite(LeftWheel_In4, HIGH);
+  
+  digitalWrite(RightWheel_In1, LOW);
+  digitalWrite(RightWheel_In2, HIGH);
+}
+
+void StopDrive ()  //determine later if decceleration is needed
+{
+  digitalWrite(LeftWheel_In3, LOW);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, LOW);
+  digitalWrite(RightWheel_In2, LOW);
+  
+  analogWrite(LeftEnable, 0);
+  analogWrite(RightEnable, 0);
+}
+
+void LeftTurn_Inplace (int speed)
+{
+  analogWrite(LeftEnable, speed); //speed subject to change
+  analogWrite(RightEnable, speed);
+  
+  digitalWrite(LeftWheel_In3, LOW);
+  digitalWrite(LeftWheel_In4, HIGH);
+  
+  digitalWrite(RightWheel_In1, HIGH);
+  digitalWrite(RightWheel_In2, LOW);
+}
+
+void RightTurn_Inplace (int speed) 
+{
+  analogWrite(LeftEnable, speed); //speed subject to change
+  analogWrite(RightEnable, speed);
+  
+  digitalWrite(LeftWheel_In3, HIGH);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, LOW);
+  digitalWrite(RightWheel_In2, HIGH);
+}
