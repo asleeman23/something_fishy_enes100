@@ -1,0 +1,32 @@
+
+int LeftWheel_In3 = 4;
+int LeftWheel_In4 = 2;
+int LeftEnable = 3;
+int RightWheel_In2 = 8;
+int RightWheel_In1 = 7;
+int RightEnable = 11;
+
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(LeftWheel_In3, OUTPUT);
+  pinMode(LeftWheel_In4, OUTPUT);
+  pinMode(RightWheel_In2, OUTPUT);
+  pinMode(RightWheel_In1, OUTPUT);
+  
+  pinMode(LeftEnable, OUTPUT);
+  pinMode(RightEnable, OUTPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  digitalWrite(LeftEnable, HIGH);
+  digitalWrite(RightEnable, HIGH);
+  
+  digitalWrite(LeftWheel_In3, HIGH);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, LOW);
+  digitalWrite(RightWheel_In2, HIGH);  
+  exit(0);
+}
