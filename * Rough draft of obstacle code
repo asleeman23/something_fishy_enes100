@@ -1,0 +1,129 @@
+void loop()  //obstacles with GoTo function
+{
+  ReverseDrive(50); //move out of mission site
+  delay(500);
+  StopDrive();
+
+  GoTo(starting x, starting y); //where we start the naigation 
+  TurnLeftTo(1.571);
+  GoToYOnlyTurn(1st y);
+  if (!Obstacle()) 
+  {
+    GoToXOnly(1st x + 0.5);
+    ObstacleDrive2();
+  }
+  else if (Obstacle()) 
+  {
+    GoToYOnlyTurn(2nd y);
+    if (!Obstacle())
+    {
+      GoToXOnly(2nd x + 0.5);
+      ObstacleDrive2();
+    }
+    else if (Obstacle())
+    {
+      GoToYOnly(3rd y);
+      GoToXOnly(2nd x);
+      GoTo( 2ndX, 1st Y);
+      
+  
+    
+      void GoToYOnlyTurn () {
+        
+        
+  
+  
+}
+      
+void ObstacleDrive2();
+      if(!Obstacle()) {
+        GoToXOnly(3);
+      }
+        else {
+          GoToYOnly(starting pos);
+          
+      
+void GoToYOnlyTurn () {   
+  if (y_coord < y) TurnTo(1.571);
+  else if (y_coord > y) TurnTo(-1.571);
+
+  		while(abs(y_coord - y) > 0.1) { // Will move toward the wall until y_coord is met
+        	ForwardDrive(255);
+          y_coord = Enes100.getY();
+            delay(10);
+        	}
+  		StopDrive();
+  TurnTo(0);
+    }
+     
+bool Obstacle();
+float cm = distance();
+
+  if (cm <= 8.00) {
+  return true;
+  } 
+  else {
+    return false;
+  }
+}
+
+
+void ObstacleDrive2()
+  TurnRightTo(-1.571);
+  while(!Obstacle){
+  	ForwardDrive(5);
+	}
+  TurnLeftTo(0);
+    
+  if (!Obstacle()) 
+  {
+    GoToXOnly(1st x + 0.5);
+    ForwardDrive(10);
+  }
+  else if (Obstacle()) 
+  {
+    GoToYOnly(2nd y);
+    if (!Obstacle())
+    {
+      GoToXOnly(2nd x + 0.5);
+      ForwardDrive(10);
+    }
+    else if (Obstacle())
+    {
+      GoToYOnly(3rd y);
+      GoToYOnly
+
+
+
+
+
+
+
+
+
+
+
+void GoTo (float x, float y) {
+
+ 
+    if (y_coord < y) TurnTo(1.571);
+    if (y_coord > y) TurnTo(-1.571);
+
+  		while(abs(y_coord - y) > 0.1) { // Will move toward the wall until y_coord is met
+        	ForwardDrive(10);
+          y_coord = Enes100.getY();
+            delay(10);
+        	}
+  		StopDrive();
+    
+    if (x_coord < x) TurnTo(0.0);
+    if (x_coord > x) TurnTo(3.1416);
+    StopDrive();
+  		while(abs(x_coord - x) > 0.1) { // Will move toward the wall until y_coord is met
+        	ForwardDrive(10);
+          x_coord = Enes100.getX();
+            delay(10);
+        	}
+  		StopDrive();
+  	
+    }
