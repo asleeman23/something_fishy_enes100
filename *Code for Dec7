@@ -1,0 +1,141 @@
+#include "Enes100.h"
+
+int LeftWheel_In3 = 4;
+int LeftWheel_In4 = 2;
+int LeftEnable = 3;
+int RightWheel_In2 = 8;
+int RightWheel_In1 = 7;
+int RightEnable = 11;
+
+int CameraRX = 6;
+int CameraTX = 12;
+
+float RotationTheta;
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(LeftWheel_In3, OUTPUT);
+  pinMode(LeftWheel_In4, OUTPUT);
+  pinMode(RightWheel_In2, OUTPUT);
+  pinMode(RightWheel_In1, OUTPUT);
+  
+  pinMode(LeftEnable, OUTPUT);
+  pinMode(RightEnable, OUTPUT);
+
+  pinMode(CameraRX, INPUT);
+  pinMode(CameraTX, OUTPUT);
+
+ Enes100.begin("Something Fishy", WATER, 697, 1120, CameraTX, CameraRX);
+
+}
+
+void ForwardDrive() {
+  int speed = 120;
+  analogWrite(LeftEnable, speed);
+  analogWrite(RightEnable, speed);
+  
+  digitalWrite(LeftWheel_In3, HIGH);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, HIGH);
+  digitalWrite(RightWheel_In2, LOW);  
+}
+
+void StopDrive ()  //determine later if decceleration is needed
+{
+  digitalWrite(LeftWheel_In3, LOW);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, LOW);
+  digitalWrite(RightWheel_In2, LOW);
+  
+  analogWrite(LeftEnable, 0);
+  analogWrite(RightEnable, 0);
+}
+
+
+void LeftTurn_Inplace ()
+{
+  int speed = 120;
+  analogWrite(LeftEnable, speed); //speed subject to change
+  analogWrite(RightEnable, speed);
+  
+  digitalWrite(LeftWheel_In3, HIGH);
+  digitalWrite(LeftWheel_In4, LOW);
+  
+  digitalWrite(RightWheel_In1, LOW);
+  digitalWrite(RightWheel_In2, HIGH);
+}
+
+void RightTurn_Inplace () 
+{
+  int speed = 120;
+  analogWrite(LeftEnable, speed); //speed subject to change
+  analogWrite(RightEnable, speed);
+  
+  digitalWrite(LeftWheel_In3, LOW);
+  digitalWrite(LeftWheel_In4, HIGH);
+  
+  digitalWrite(RightWheel_In1, HIGH);
+  digitalWrite(RightWheel_In2, LOW);
+}
+
+
+void TurnLeftTo (float theta) { // Turning left until RotationTheta is met
+   while(abs(RotationTheta - theta) > 0.2) {
+	RotationTheta = Enes100.getTheta();
+     LeftTurn_Inplace ();
+     delay(5);
+	}
+  StopDrive();
+}
+
+void TurnRightTo (float theta) { // Turning right until RotationTheta is met
+   
+   while(abs(RotationTheta - (theta)) > 0.2) {
+    RotationTheta = Enes100.getTheta();
+	RightTurn_Inplace ();
+  delay(5);
+	}
+  StopDrive();
+}
+
+void TurnTo(float theta)
+{
+  RotationTheta = Enes100.getTheta();
+  float differenceTheta = RotationTheta - theta;
+  if (differenceTheta < 0) TurnLeftTo(theta);
+  	else if (differenceTheta > 0) TurnRightTo(theta);
+}
+void GoToXOnly(float x)
+{ 
+ float  x_coord = Enes100.getX();
+  if ( x_coord < x) TurnTo(0.0);
+    if (x_coord > x) TurnTo(3.1416);
+    StopDrive();
+  		while(abs(x_coord - x) > 0.5) { // Will move toward the wall until y_coord is met
+        	ForwardDrive();
+          x_coord = Enes100.getX();
+            delay(10);
+        	}
+  		StopDrive();
+}
+
+void GoToYOnly(float y)
+{
+  float y_coord = Enes100.getY();
+  if (y_coord < y) TurnTo(1.571);
+    if (y_coord > y) TurnTo(-1.571);
+
+  		while(abs(y_coord - y) > 0.2) { // Will move toward the wall until y_coord is met
+        	ForwardDrive();
+          y_coord = Enes100.getY();
+            delay(10);
+        	}
+  		StopDrive();
+    }
+
+void loop() {
+ForwardDrive();
+exit(0);
+}
