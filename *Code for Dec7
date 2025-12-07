@@ -87,17 +87,26 @@ void TurnLeftTo (float theta) { // Turning left until RotationTheta is met
      LeftTurn_Inplace ();
      delay(5);
 	}
-  StopDrive();
+  StopDrive(); //copy TurnRightTo code but inverted for more accurate turning
 }
 
 void TurnRightTo (float theta) { // Turning right until RotationTheta is met
    
-   while(abs(RotationTheta - (theta)) > 0.2) {
+   while(abs(RotationTheta - (theta)) > 0.2) { //original turning code
     RotationTheta = Enes100.getTheta();
 	RightTurn_Inplace ();
   delay(5);
 	}
   StopDrive();
+RotationTheta = Enes100.getTheta(); //following code is for more precision. Turning isn't based on constant readings, just based on time (that we would decide manually (?))
+if((RotationTheta > theta) & (abs(RotationTheta - theta) > 0.05)) { //if the robot didn't turn far enough, turn more for 20ms
+TurnRight_InPlace();
+delay(20);
+StopDrive();
+if((RotationTheta < theta) & (abs(RotationTheta - theta) > 0.05)) { //if the robot has turned too far, turn back for 20ms
+TurnLeft_InPlace();
+delay(20);
+StopDrive(); //this code can be repeated many times with different delays to get better results hopefully
 }
 
 void TurnTo(float theta)
@@ -107,7 +116,7 @@ void TurnTo(float theta)
   if (differenceTheta < 0) TurnLeftTo(theta);
   	else if (differenceTheta > 0) TurnRightTo(theta);
 }
-void GoToXOnly(float x)
+void GoToXOnly(float x) // same description as GoToYOnly
 { 
  float  x_coord = Enes100.getX();
   if ( x_coord < x) TurnTo(0.0);
@@ -121,7 +130,7 @@ void GoToXOnly(float x)
   		StopDrive();
 }
 
-void GoToYOnly(float y)
+void GoToYOnly(float y) //this should go to a given Y coord. Turns to face direction, goes forward, stops. Maybe we can do something with the x coord for more precision -- if the x_coord is too far from the original value, rotate a little. 
 {
   float y_coord = Enes100.getY();
   if (y_coord < y) TurnTo(1.571);
@@ -139,3 +148,5 @@ void loop() {
 ForwardDrive();
 exit(0);
 }
+
+//there are more functions in other files on github, like the obstacle movement and GoTo functions. 
