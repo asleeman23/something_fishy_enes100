@@ -1,3 +1,4 @@
+int commPin = 8; //tells to turn on
 
 //Linear Actuator
 int linAc_In3 = 2;
@@ -9,7 +10,7 @@ int extendTime = 6500; //time to fully extend/retract actuator
 int linAc_In1 = 12;
 int linAc_In2 = 13;
 int linAcEnable1 = 4;
-int pumpTime = 30000; //this is a guess. We will find a better value in testing
+int pumpTime = 20000; //this is a guess. We will find a better value in testing
 
   
 //Ultrasonic Sensor
@@ -18,10 +19,20 @@ int echoPin = 11;
 float duration, distance, wLevel;
 int height = 82; //this is a guess of the height from the ground to the ultrasonic sensor in millimeters
 
+
+
+int prediction; // either 0 or 1, for machine learning
+
+int sum = 0;
+int wVal;
+
+
 void setup()
 {
   Serial.begin (9600);
   
+  pinMode (commPin, INPUT);
+
   pinMode(linAc_In3, OUTPUT);
   pinMode(linAc_In4, OUTPUT);
   pinMode(linAcEnable2, OUTPUT);
@@ -40,7 +51,9 @@ void setup()
 }
 
 void loop() {
-/*
+if (digitalRead(commPin) == HIGH) {
+  delay (2000); //give time for water to calm
+for (int i = 0; i < 100; i++) {
   digitalWrite(trigPin, LOW);  //runs and gives a value of the water level using the ultrasonic sensor
   delayMicroseconds(2);  
   digitalWrite(trigPin, HIGH);  
@@ -48,12 +61,24 @@ void loop() {
   digitalWrite(trigPin, LOW);  
   duration = pulseIn(echoPin, HIGH); 
   distance = duration * 0.1715;
-  wLevel = height - 13 - distance;
-  Serial.print (wLevel);
-  delay (500);
-*/
+  wLevel = 76 - distance;
+  sum = sum + wLevel;
+  delay(50); // small delay between samples
+  }
+  float average = sum / 100;
+
+  if (0 <= average && average < 25) {
+    wVal = 0;
+  }
+  else if (25 <= average && average < 35) {
+    wVal = 1;
+  }
+  else {
+    wVal = 2;
+  }
 
   digitalWrite(linAcEnable2, HIGH); //sets the speed for linear actuator
+ 
   digitalWrite (linAc_In4, HIGH); //extends linear actuator
   digitalWrite (linAc_In3, LOW);
   delay (extendTime);
@@ -71,7 +96,11 @@ void loop() {
   digitalWrite (linAc_In3, HIGH);
   delay (extendTime);
   digitalWrite (linAc_In3, LOW);
-  delay (500);
+  delay (50);
+  
+  Serial.write(wVal);
 
-  exit (0); //stops the program
+
+exit(0);
+}
 }
