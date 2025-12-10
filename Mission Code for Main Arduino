@@ -1,0 +1,51 @@
+#include "Enes100.h" 
+
+int commOutPin = 5;
+
+int prediction;
+
+int response;
+int txPin = 12;
+int rxPin = 6;
+
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(9600);
+
+pinMode(commOutPin, OUTPUT);
+Enes100.begin("SomethingFishy", WATER, 697, 1120, txPin, rxPin);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+delay (5000);
+digitalWrite(commOutPin, HIGH);
+
+while (Serial.available() == 0) {
+  delay (1);// do nothing, just wait
+}
+
+  response = Serial.read();
+  if (response == 0) {
+      Enes100.mission(DEPTH, 20);
+    }
+  else if (response == 1) {
+      Enes100.mission(DEPTH, 30);
+    }
+  else {
+      Enes100.mission(DEPTH, 40);
+    }
+
+
+ //machine Learning alg for other arduino :
+  prediction = Enes100.MLGetPrediction(2);
+  
+  if (prediction == 0) {
+    Enes100.mission(WATER_TYPE, FRESH_UNPOLLUTED);
+  }
+  else  {
+    Enes100.mission(WATER_TYPE, FRESH_POLLUTED);
+  }
+digitalWrite(commOutPin, LOW);
+exit(0);
+}
