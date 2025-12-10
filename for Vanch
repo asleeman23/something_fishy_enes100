@@ -1,0 +1,41 @@
+void TurnLeftTo(float final)
+{ 
+    float current = Enes100.getTheta();
+    float difftheta = final - current;
+    float absdifftheta = abs(difftheta);
+
+    while(absdifftheta > 0.5) 
+    { 
+        
+        LeftTurn_Inplace();
+        delay(500);
+        StopDrive();
+        delay(500);
+        current = Enes100.getTheta();
+        difftheta = final - current;
+        absdifftheta = abs(difftheta);
+        
+    }
+
+}
+
+void TurnRightTo(float final)
+{ 
+    float current = Enes100.getTheta();
+    float difftheta = final - current;
+    float absdifftheta = abs(difftheta);
+
+    while(absdifftheta > 0.5) 
+    { 
+        
+        RightTurn_Inplace();
+        delay(500);
+        StopDrive();
+        delay(500);
+        current = Enes100.getTheta();
+        difftheta = final - current;
+        absdifftheta = abs(difftheta);
+    }
+
+
+}
