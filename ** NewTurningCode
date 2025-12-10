@@ -1,0 +1,56 @@
+void TurnLeftTo(float theta)
+{ 
+    float RotationTheta = Enes100.getTheta();
+    float difftheta = RotationTheta - theta;
+    float absdifftheta = abs(difftheta);
+
+    while(absdifftheta > 0.5) 
+    { 
+        RotationTheta = Enes100.getTheta();
+        LeftTurn_Inplace();
+        delay(1000);
+        StopDrive();
+        difftheta = RotationTheta - theta;
+        absdifftheta = abs(difftheta);
+    }
+
+    while(difftheta > 0.05 && difftheta <= 0.5) 
+    {
+        RotationTheta = Enes100.getTheta();
+        LeftTurn_Inplace();
+        delay(250);
+        StopDrive();
+        difftheta = RotationTheta - theta;
+        absdifftheta = abs(difftheta);
+    }
+
+    if(difftheta > 0 && absdifftheta) //overshot?
+    {
+        
+    }
+}
+
+void TurnRightTo(float theta)
+{ 
+    float RotationTheta = Enes100.getTheta();
+    float difftheta = RotationTheta - theta;
+    float absdifftheta = abs(difftheta);
+
+    while(absdifftheta > 0.5) 
+    { 
+        RotationTheta = Enes100.getTheta();
+        RightTurn_Inplace();
+        delay(1000);
+        StopDrive();
+        difftheta = RotationTheta - theta;
+        absdifftheta = abs(difftheta);
+    }
+
+    while(difftheta > 0.05) 
+    {
+        RotationTheta = Enes100.getTheta();
+        RightTurn_Inplace();
+        delay(250);
+        difftheta = RotationTheta - theta;
+    }
+}
