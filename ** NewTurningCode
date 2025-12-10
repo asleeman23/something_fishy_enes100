@@ -1,56 +1,53 @@
-void TurnLeftTo(float theta)
+void TurnLeftTo(float final)
 { 
-    float RotationTheta = Enes100.getTheta();
-    float difftheta = RotationTheta - theta;
+    float current = Enes100.getTheta();
+    float difftheta = final - current;
     float absdifftheta = abs(difftheta);
 
     while(absdifftheta > 0.5) 
     { 
-        RotationTheta = Enes100.getTheta();
+        current = Enes100.getTheta();
         LeftTurn_Inplace();
         delay(1000);
         StopDrive();
-        difftheta = RotationTheta - theta;
+        difftheta = final - current;
         absdifftheta = abs(difftheta);
     }
 
-    while(difftheta > 0.05 && difftheta <= 0.5) 
+    while(absdifftheta > 0.05 && absdifftheta <= 0.5) 
     {
-        RotationTheta = Enes100.getTheta();
+        current = Enes100.getTheta();
         LeftTurn_Inplace();
         delay(250);
         StopDrive();
-        difftheta = RotationTheta - theta;
+        difftheta = final - current;
         absdifftheta = abs(difftheta);
-    }
-
-    if(difftheta > 0 && absdifftheta) //overshot?
-    {
-        
     }
 }
 
-void TurnRightTo(float theta)
+void TurnRightTo(float final)
 { 
-    float RotationTheta = Enes100.getTheta();
-    float difftheta = RotationTheta - theta;
+    float current = Enes100.getTheta();
+    float difftheta = final - current;
     float absdifftheta = abs(difftheta);
 
     while(absdifftheta > 0.5) 
     { 
-        RotationTheta = Enes100.getTheta();
+        current = Enes100.getTheta();
         RightTurn_Inplace();
         delay(1000);
         StopDrive();
-        difftheta = RotationTheta - theta;
+        difftheta = final - current;
         absdifftheta = abs(difftheta);
     }
 
-    while(difftheta > 0.05) 
+    while(absdifftheta <= 0.5 && absdifftheta > 0.05) 
     {
-        RotationTheta = Enes100.getTheta();
+        current = Enes100.getTheta();
         RightTurn_Inplace();
         delay(250);
-        difftheta = RotationTheta - theta;
+        StopDrive();
+        difftheta = final - current;
+        absdifftheta = abs(difftheta);
     }
 }
