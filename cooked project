@@ -1,0 +1,75 @@
+#include "Enes100.h" 
+int commPin = 8; //tells to turn on
+
+//Linear Actuator
+int linAc_In3 = 2;
+int linAc_In4 = 3;
+int linAcEnable2 = 5;
+int extendTime = 6500; //time to fully extend/retract actuator
+
+//Water Pump
+int linAc_In1 = 12;
+int linAc_In2 = 13;
+int linAcEnable1 = 4;
+int pumpTime = 30000; //this is a guess. We will find a better value in testing
+
+  
+//Ultrasonic Sensor
+int trigPin = 10;
+int echoPin = 11;
+float duration, distance, wLevel;
+int height = 82; //this is a guess of the height from the ground to the ultrasonic sensor in millimeters
+
+int txPin = 7;
+int rxPin = 8;
+
+
+int prediction; // either 0 or 1, for machine learning
+
+int sum = 0;
+int wVal;
+
+
+
+int response;
+
+void setup()
+{
+  Serial.begin (9600);
+  
+  pinMode (commPin, INPUT);
+
+  pinMode(linAc_In3, OUTPUT);
+  pinMode(linAc_In4, OUTPUT);
+  pinMode(linAcEnable2, OUTPUT);
+ 
+  pinMode(linAc_In1, OUTPUT);
+  pinMode(linAc_In2, OUTPUT);
+  pinMode(linAcEnable1, OUTPUT);
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  
+  pinMode(linAc_In1, OUTPUT);
+  pinMode(linAc_In2, OUTPUT);
+  pinMode(linAcEnable1, OUTPUT);
+
+  pinMode (rxPin, INPUT);
+  pinMode (txPin, OUTPUT);
+
+ Enes100.begin("SomethingFishy", WATER, 697, 1120, txPin, rxPin);
+}
+
+void loop() {
+
+if (Enes100.isConnected() == true) {
+    digitalWrite(linAcEnable1, HIGH); //sets the max speed for pump
+  digitalWrite (linAc_In1, HIGH); //turns on pump
+  digitalWrite (linAc_In2, LOW);
+  delay (pumpTime);
+  digitalWrite (linAc_In1, LOW); //turns off pump
+  delay (500);
+}
+
+
+}
